@@ -2,32 +2,37 @@
 
 set -o pipefail
 
+echo "####### STARTUP ########"
+
 # Create .pelicanignore file with default config if it doesnt exist
+echo "Checking .pelicanignore..."
 if [ ! -f ".pelicanignore" ]; then
-    echo "create .pelicanignore"
+    echo "Creating .pelicanignore"
     echo "*" > .pelicanignore
     echo "!ShooterGame/Saved/" >> .pelicanignore
 fi
 
 # If whitelist enabled create whitelist file if it doesnt exist
-if [ $WHITELIST != 0 ]; then
-    echo "whitelist enabled"
-    mkdir -p ShooterGame/Binaries/Linux;
+echo "Checking whitelist settings..."
+if [ "$WHITELIST" != 0 ]; then
+    echo "Whitelist enabled. Creating PlayersJoinNoCheckList.txt if necessary."
+    mkdir -p ShooterGame/Binaries/Linux
     touch -a ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt
 fi
 
 # Link the ~20GB ShooterGame/Content folder
+echo "Checking CONTENT_MOUNT..."
 if [[ $CONTENT_MOUNT ]]; then
     if [[ ! -d "$CONTENT_MOUNT" ]]; then
-        echo "$CONTENT_MOUNT does not exist!"
+        echo "ERROR: $CONTENT_MOUNT does not exist!"
         exit 1
     fi
 fi
 
 
-# Function to stop the server
+echo "Defining stop function..."
 rmv() {
-    echo "stopping server"
+    echo "####### STOPPING SERVER ########"
     rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p "$ARK_ADMIN_PASSWORD" saveworld && \
     rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p "$ARK_ADMIN_PASSWORD" DoExit && \
     wait "$ARK_PID"
@@ -39,6 +44,7 @@ rmv() {
 trap rmv 15 2
 
 # Function to fetch mods
+echo "Defining get_mods function..."
 get_mods() {
     COLLECTION_MODS=""
     if [[ $COLLECTION_IDS ]]; then
@@ -65,11 +71,8 @@ get_mods() {
     echo "$MOD_ID"
 }
 
+echo "Defining get_params function..."
 get_params() {
-    # Get MOD_ID from collections
-    echo "$(echo "$MOD_ID" | tr ',' '\n' | wc -l) mods"
-
-    # Build server start params
     PARAMS="$SERVER_MAP?listen?Port=$SERVER_PORT?QueryPort=$QUERY_PORT?RCONPort=$RCON_PORT?RCONEnabled=True"
     PARAMS+="?MaxPlayers=$MAX_PLAYERS?SessionName=\"$SESSION_NAME\""
 
@@ -91,15 +94,16 @@ get_params() {
     echo $PARAMS
 }
 
-start=`date +%s`
+echo "####### FETCHING MODS ########"
+
+start=$(date +%s)
 
 MOD_ID=$(get_mods)
-echo MODS: $MOD_ID
+echo "MODS: $MOD_ID"
 
 PARAMS=$(get_params)
-# echo PARAMS: $PARAMS
 
-# Start the server
+echo "####### STARTING SERVER ########"
 cd ShooterGame/Binaries/Linux && ./ShooterGameServer $PARAMS &
 # Store PID
 ARK_PID=$!
@@ -107,18 +111,19 @@ ARK_PID=$!
 sleep 5
 
 counter=0
-echo "Wait for RCON to be available..."
+echo "Waiting for RCON to be available..."
 while ! rcon -t rcon -T 1s -a 127.0.0.1:$RCON_PORT -p $ARK_ADMIN_PASSWORD "Broadcast Up'n'running" >/dev/null 2>&1; do
   echo "Server not yet ready... checking again in 5s (retry: $counter)"
   counter=$((counter+1))
   sleep 5
 done
 
-end=`date +%s`
+end=$(date +%s)
 runtime=$((end-start))
-echo "Server started in $runtime seconds"
+echo "Server started successfully in $runtime seconds"
 
+echo "####### RCON CONSOLE ACTIVE ########"
 while true; do
-    echo "Connecting RCON Console"
+    echo "Connecting to RCON Console..."
     rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p $ARK_ADMIN_PASSWORD
 done
