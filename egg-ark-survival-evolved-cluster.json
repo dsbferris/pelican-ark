@@ -2,9 +2,9 @@
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PLCN_v1",
-        "update_url": null
+        "update_url": "https:\/\/raw.githubusercontent.com\/dsbferris\/pelican-ark\/refs\/heads\/main\/egg-ark-survival-evolved-cluster.json"
     },
-    "exported_at": "2025-04-26T12:18:57+00:00",
+    "exported_at": "2025-04-26T12:31:02+00:00",
     "name": "Ark: Survival Evolved Cluster",
     "author": "gaming@ferris-s.de",
     "uuid": "86828e97-2767-4b59-af71-472747deaa5a",
@@ -17,7 +17,7 @@
         "ghcr.io\/parkervcp\/steamcmd:debian": "ghcr.io\/parkervcp\/steamcmd:debian"
     },
     "file_denylist": [],
-    "startup": "bash startup.sh",
+    "startup": "if [ -f \"startup.sh\" ]; then .\/startup.sh else curl -sSL -o startup.sh https:\/\/raw.githubusercontent.com\/dsbferris\/pelican-ark\/refs\/heads\/main\/startup.sh && chmod +x .\/startup.sh && .\/startup.sh fi",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"Waiting commands for 127.0.0.1:\"\r\n}",
@@ -152,13 +152,13 @@
         },
         {
             "name": "Content Mount",
-            "description": "Not yet implemented.",
+            "description": "Share the 20GB Content with other ARK Server.\nExample: \/mnt\/ark\/server-files\/ShooterGame\/Content\/",
             "env_variable": "CONTENT_MOUNT",
-            "default_value": "\/mnt\/ark\/server-files\/ShooterGame\/Content\/",
+            "default_value": "",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
-                "required",
+                "nullable",
                 "string"
             ],
             "sort": 14
