@@ -18,13 +18,10 @@ fi
 
 # Link the ~20GB ShooterGame/Content folder
 if [[ $CONTENT_MOUNT ]]; then
-    echo "setup content mount at $CONTENT_MOUNT"
     if [[ ! -d "$CONTENT_MOUNT" ]]; then
         echo "$CONTENT_MOUNT does not exist!"
         exit 1
     fi
-    mkdir -p ShooterGame
-    ln -sf "$CONTENT_MOUNT" ShooterGame/Content
 fi
 
 
