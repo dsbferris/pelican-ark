@@ -55,7 +55,7 @@ get_mods() {
         done
 
         if COLLECTION_MODS=$(curl -sSL --data "$POST_DATA" https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/ \
-            | jq -r '.response.collectiondetails[].children[].publishedfileid' \
+            | $HOME/.local/bin/jq -r '.response.collectiondetails[].children[].publishedfileid' \
             | paste -sd "," -) && [[ $COLLECTION_MODS ]]; then
             :
         else
@@ -96,14 +96,22 @@ get_params() {
 
 echo "####### FETCHING MODS ########"
 
-start=$(date +%s)
 
 MOD_ID=$(get_mods)
-echo "MODS: $MOD_ID"
+if [[ $MOD_ID ]]; then
+    mod_count=$(echo $MOD_ID | tr "," "\n" | wc -l)
+    echo "Fetched $mod_count mods"
+    for mod in $(echo $MOD_ID | tr "," "\n")
+    do
+        echo "MOD: $mod"
+    done
+fi
 
 PARAMS=$(get_params)
 
+
 echo "####### STARTING SERVER ########"
+start=$(date +%s)
 cd ShooterGame/Binaries/Linux && ./ShooterGameServer $PARAMS &
 # Store PID
 ARK_PID=$!
