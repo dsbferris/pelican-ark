@@ -70,24 +70,22 @@ get_mods() {
 
 get_params() {
     # Get MOD_ID from collections
-    MOD_ID=$(get_mods)
-
     echo "$(echo "$MOD_ID" | tr ',' '\n' | wc -l) mods"
 
     # Build server start params
-    PARAMS="$SERVER_MAP?listen?Port=$SERVER_PORT?RCONPort=$RCON_PORT?QueryPort=$QUERY_PORT?RCONEnabled=True"
+    PARAMS="$SERVER_MAP?listen?Port=$SERVER_PORT?QueryPort=$QUERY_PORT?RCONPort=$RCON_PORT?RCONEnabled=True"
     PARAMS+="?MaxPlayers=$MAX_PLAYERS?SessionName=\"$SESSION_NAME\""
 
-    [[ $ARK_PASSWORD ]] && PARAMS+="?ServerPassword=\"$ARK_PASSWORD\""
-    [[ $ARK_ADMIN_PASSWORD ]] && PARAMS+="?ServerAdminPassword=\"$ARK_ADMIN_PASSWORD\""
-    [[ $ARK_SPECTATOR_PASSWORD ]] && PARAMS+="?SpectatorPassword=\"$ARK_SPECTATOR_PASSWORD\""
+    [[ $ARK_PASSWORD ]] && PARAMS+="?ServerPassword=$ARK_PASSWORD"
+    [[ $ARK_ADMIN_PASSWORD ]] && PARAMS+="?ServerAdminPassword=$ARK_ADMIN_PASSWORD"
+    [[ $ARK_SPECTATOR_PASSWORD ]] && PARAMS+="?SpectatorPassword=$ARK_SPECTATOR_PASSWORD"
     [[ $MOD_ID ]] && PARAMS+="?GameModIds=$MOD_ID"
     [[ $QARGS ]] && PARAMS+="$QARGS"
 
     [[ $BATTLE_EYE == 1 ]] || PARAMS+=" -NoBattlEye"
     PARAMS+=" -server -automanagedmods"
-    [[ $CLUSTER_ID ]] && PARAMS+=" -clusterid=\"$CLUSTER_ID\""
-    [[ $CLUSTER_DIR ]] && PARAMS+=" -ClusterDirOverride=\"$CLUSTER_DIR\""
+    [[ $CLUSTER_ID ]] && PARAMS+=" -clusterid=$CLUSTER_ID"
+    [[ $CLUSTER_DIR ]] && PARAMS+=" -ClusterDirOverride=$CLUSTER_DIR"
     [[ $ACTIVE_EVENT ]] && PARAMS+=" -ActiveEvent=$ACTIVE_EVENT"
     [[ $WHITELIST == 0 ]] || PARAMS+=" -exclusivejoin"
     [[ $ARGS ]] && PARAMS+="$ARGS"
@@ -98,24 +96,32 @@ get_params() {
 
 start=`date +%s`
 
+MOD_ID=$(get_mods)
+echo MODS: $MOD_ID
+
 PARAMS=$(get_params)
-echo $PARAMS
+echo PARAMS: $PARAMS
 
 # Start the server
 cd ShooterGame/Binaries/Linux && ./ShooterGameServer $PARAMS &
 # Store PID
 ARK_PID=$!
 
+sleep 5
 
+counter=0
 echo "Wait for RCON to be available..."
-while ! rcon -t rcon -T 1 -a 127.0.0.1:$RCON_PORT -p "$ARK_ADMIN_PASSWORD" "Broadcast Up'n'running" >/dev/null 2>&1; do
-  echo "Server not yet ready... checking again in 5s"
+while ! rcon -t rcon -T 1s -a 127.0.0.1:$RCON_PORT -p $ARK_ADMIN_PASSWORD "Broadcast Up'n'running" >/dev/null 2>&1; do
+  echo "Server not yet ready... checking again in 5s (retry: $counter)"
+  counter=$((counter+1))
   sleep 5
 done
 
 end=`date +%s`
 runtime=$((end-start))
 echo "Server started in $runtime seconds"
-echo "Connecting RCON Console"
 
-rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p "$ARK_ADMIN_PASSWORD"
+while true; do
+    echo "Connecting RCON Console"
+    rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p $ARK_ADMIN_PASSWORD
+done
