@@ -49,13 +49,14 @@ cd /mnt/server
 # Link the ~20GB ShooterGame/Content folder
 if [[ $CONTENT_MOUNT ]]; then
     echo "setup content mount at $CONTENT_MOUNT"
-    mkdir -p ShooterGame
-    ln -sf "$CONTENT_MOUNT" ShooterGame/Content
+    mkdir -p $HOME/ShooterGame
+    ln -sf "$CONTENT_MOUNT" $HOME/ShooterGame/Content
 fi
 
 rm -f startup.sh
 curl -sSLO https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/main/startup.sh \
     && chmod +x startup.sh
 
+mkdir -p $HOME/.local/bin
 curl -sSL -o jq https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 \
-    && chmod +x jq && mv jq /usr/local/bin/
+    && chmod +x jq && mv jq $HOME/.local/bin/
