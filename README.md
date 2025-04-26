@@ -1,6 +1,14 @@
 # pelican-ark
 
+### Collections
+Base  
+https://steamcommunity.com/sharedfiles/filedetails/?id=3470695377
 
-```bash
-[ ! -f "startup.sh"] && curl -sSL -o startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/main/startup.sh && chmod +x startup.sh; ./startup.sh
-```
+### Mods
+https://steamcommunity.com/sharedfiles/filedetails/?id=2962071508
+https://steamcommunity.com/sharedfiles/filedetails/?id=3324881669
+https://steamcommunity.com/sharedfiles/filedetails/?id=942185438
+https://steamcommunity.com/sharedfiles/filedetails/?id=2182894352
+
+### Startup wrapper
+`./startup.sh`
