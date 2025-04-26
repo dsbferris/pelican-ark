@@ -90,14 +90,24 @@ get_params() {
     echo $PARAMS
 }
 
+start=`date +%s`
+
 PARAMS=$(get_params)
 # Start the server
 cd ShooterGame/Binaries/Linux && ./ShooterGameServer $PARAMS &
 # Store PID
 ARK_PID=$!
 
-# Wait for RCON to be available
-until echo "waiting for rcon connection..."; do
-    (rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p "$ARK_ADMIN_PASSWORD")<&0 & wait $! || break
-    sleep 5
+
+echo "Wait for RCON to be available..."
+while ! rcon -t rcon -T 1 -a 127.0.0.1:$RCON_PORT -p "$ARK_ADMIN_PASSWORD" "Broadcast Up'n'running" >/dev/null 2>&1; do
+  echo "Server not yet ready... checking again in 5s"
+  sleep 5
 done
+
+end=`date +%s`
+runtime=$((end-start))
+echo "Server started in $runtime seconds"
+echo "Connecting RCON Console"
+
+rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p "$ARK_ADMIN_PASSWORD"
