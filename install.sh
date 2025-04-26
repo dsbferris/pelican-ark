@@ -64,6 +64,6 @@ curl -sSL -o jq https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux
     && chmod +x jq && mv jq $HOME/.local/bin/
 
 # Create empty settings files
-mkdir -p $HOME/ShooterGame/Saved/Config/LinxuServer
+mkdir -p $HOME/ShooterGame/Saved/Config/LinuxServer
 touch -a Game.ini
 touch -a GameUserSettings.ini
