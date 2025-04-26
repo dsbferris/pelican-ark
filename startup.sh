@@ -100,7 +100,6 @@ MOD_ID=$(get_mods)
 echo MODS: $MOD_ID
 
 PARAMS=$(get_params)
-echo PARAMS: $PARAMS
 
 # Start the server
 cd ShooterGame/Binaries/Linux && ./ShooterGameServer $PARAMS &
