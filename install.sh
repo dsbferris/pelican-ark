@@ -5,7 +5,7 @@
 
 apt -y update
 apt -y upgrade
-apt -y --no-install-recommends --no-install-suggests install curl lib32gcc-s1 ca-certificates
+apt -y --no-install-recommends --no-install-suggests install curl lib32gcc-s1 ca-certificates jq
 
 ## just in case someone removed the defaults.
 if [ "${STEAM_USER}" == "" ]; then
@@ -52,3 +52,10 @@ if [[ $CONTENT_MOUNT ]]; then
     mkdir -p ShooterGame
     ln -sf "$CONTENT_MOUNT" ShooterGame/Content
 fi
+
+rm -f startup.sh
+curl -sSLO https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/main/startup.sh \
+    && chmod +x startup.sh
+
+curl -sSL -o jq https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 \
+    && chmod +x jq && mv jq /usr/local/bin/
