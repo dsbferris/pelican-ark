@@ -53,10 +53,17 @@ if [[ $CONTENT_MOUNT ]]; then
     ln -sf "$CONTENT_MOUNT" $HOME/ShooterGame/Content
 fi
 
+# Fetch startup.sh
 rm -f startup.sh
 curl -sSLO https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/main/startup.sh \
     && chmod +x startup.sh
 
+# Get jq
 mkdir -p $HOME/.local/bin
 curl -sSL -o jq https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 \
     && chmod +x jq && mv jq $HOME/.local/bin/
+
+# Create empty settings files
+mkdir -p $HOME/ShooterGame/Saved/Config/LinxuServer
+touch -a Game.ini
+touch -a GameUserSettings.ini
