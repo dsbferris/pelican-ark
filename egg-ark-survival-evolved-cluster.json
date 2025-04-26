@@ -4,7 +4,7 @@
         "version": "PLCN_v1",
         "update_url": "https:\/\/raw.githubusercontent.com\/dsbferris\/pelican-ark\/refs\/heads\/main\/egg-ark-survival-evolved-cluster.json"
     },
-    "exported_at": "2025-04-26T12:31:02+00:00",
+    "exported_at": "2025-04-26T15:11:01+00:00",
     "name": "Ark: Survival Evolved Cluster",
     "author": "gaming@ferris-s.de",
     "uuid": "86828e97-2767-4b59-af71-472747deaa5a",
@@ -17,16 +17,16 @@
         "ghcr.io\/parkervcp\/steamcmd:debian": "ghcr.io\/parkervcp\/steamcmd:debian"
     },
     "file_denylist": [],
-    "startup": "if [ -f \"startup.sh\" ]; then .\/startup.sh else curl -sSL -o startup.sh https:\/\/raw.githubusercontent.com\/dsbferris\/pelican-ark\/refs\/heads\/main\/startup.sh && chmod +x .\/startup.sh && .\/startup.sh fi",
+    "startup": "[ ! -f \"startup.sh\"] && curl -sSL -o startup.sh https:\/\/raw.githubusercontent.com\/dsbferris\/pelican-ark\/refs\/heads\/main\/startup.sh && chmod +x startup.sh; .\/startup.sh",
     "config": {
         "files": "{}",
-        "startup": "{\r\n    \"done\": \"Waiting commands for 127.0.0.1:\"\r\n}",
+        "startup": "{\n    \"done\": \"Waiting commands for 127.0.0.1:\"\n}",
         "logs": "{}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# steamcmd Base Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n\r\napt -y update\r\napt -y upgrade\r\napt -y --no-install-recommends --no-install-suggests install curl lib32gcc-s1 ca-certificates\r\n\r\n## just in case someone removed the defaults.\r\nif [ \"${STEAM_USER}\" == \"\" ]; then\r\n    STEAM_USER=anonymous\r\n    STEAM_PASS=\"\"\r\n    STEAM_AUTH=\"\"\r\nfi\r\n\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\n\r\nmkdir -p \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\nmkdir -p \/mnt\/server\/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd \/mnt\/server\/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n\r\n# finish install steamcmd\r\n.\/steamcmd.sh +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +force_install_dir \/mnt\/server ${EXTRA_FLAGS} +quit\r\n\r\n## set up 32 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/.steam\/sdk32\/steamclient.so\r\n\r\n## set up 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/.steam\/sdk64\/steamclient.so\r\n\r\n## create a symbolic link for loading mods\r\ncd \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\nln -sf ..\/..\/..\/..\/..\/Steam\/steamapps steamapps\r\ncd \/mnt\/server\r\n",
+            "script": "#!\/bin\/bash\r\n# steamcmd Base Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n\r\napt -y update\r\napt -y upgrade\r\napt -y --no-install-recommends --no-install-suggests install curl lib32gcc-s1 ca-certificates\r\n\r\n## just in case someone removed the defaults.\r\nif [ \"${STEAM_USER}\" == \"\" ]; then\r\n    STEAM_USER=anonymous\r\n    STEAM_PASS=\"\"\r\n    STEAM_AUTH=\"\"\r\nfi\r\n\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\n\r\nmkdir -p \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\nmkdir -p \/mnt\/server\/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd \/mnt\/server\/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n\r\n# finish install steamcmd\r\n.\/steamcmd.sh +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +force_install_dir \/mnt\/server ${EXTRA_FLAGS} +quit\r\n\r\n## set up 32 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/.steam\/sdk32\/steamclient.so\r\n\r\n## set up 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/.steam\/sdk64\/steamclient.so\r\n\r\n## create a symbolic link for loading mods\r\ncd \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\nln -sf ..\/..\/..\/..\/..\/Steam\/steamapps steamapps\r\ncd \/mnt\/server\r\n\r\n# Link the ~20GB ShooterGame\/Content folder\r\nif [[ $CONTENT_MOUNT ]]; then\r\n    echo \"setup content mount at $CONTENT_MOUNT\"\r\n    mkdir -p ShooterGame\r\n    ln -sf \"$CONTENT_MOUNT\" ShooterGame\/Content\r\nfi",
             "container": "ghcr.io\/parkervcp\/installers:debian",
             "entrypoint": "bash"
         }
@@ -49,7 +49,7 @@
             "name": "Additional Arguments",
             "description": "Specify additional launch parameters such as -crossplay. You must include a dash - and separate each parameter with space: -crossplay -exclusivejoin.\nSee QArgs for questionmark arguments.",
             "env_variable": "ARGS",
-            "default_value": "-NoTransferFromFiltering -structurememopts",
+            "default_value": "-NoTransferFromFiltering -structurememopts -AdminLogging -NotifyAdminCommandsInChat",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
