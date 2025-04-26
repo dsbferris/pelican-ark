@@ -4,15 +4,21 @@ set -o pipefail
 
 # Create .pelicanignore file with default config if it doesnt exist
 if [ ! -f ".pelicanignore" ]; then
+    echo "create .pelicanignore"
     echo "*" > .pelicanignore
     echo "!ShooterGame/Saved/" >> .pelicanignore
 fi
 
 # If whitelist enabled create whitelist file if it doesnt exist
-[[ $WHITELIST == 0 ]] || mkdir -p ShooterGame/Binaries/Linux && touch -a ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt
+if [ $WHITELIST != 0 ]; then
+    echo "whitelist enabled"
+    mkdir -p ShooterGame/Binaries/Linux;
+    touch -a ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt
+fi
 
 # Link the ~20GB ShooterGame/Content folder
 if [[ $CONTENT_MOUNT ]]; then
+    echo "setup content mount at $CONTENT_MOUNT"
     if [[ ! -d "$CONTENT_MOUNT" ]]; then
         echo "$CONTENT_MOUNT does not exist!"
         exit 1
@@ -93,6 +99,8 @@ get_params() {
 start=`date +%s`
 
 PARAMS=$(get_params)
+echo $PARAMS
+
 # Start the server
 cd ShooterGame/Binaries/Linux && ./ShooterGameServer $PARAMS &
 # Store PID
