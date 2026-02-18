@@ -1,297 +1,297 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
-    "meta": {
-        "version": "PLCN_v1",
-        "update_url": "https:\/\/raw.githubusercontent.com\/dsbferris\/pelican-ark\/refs\/heads\/main\/egg-ark-survival-evolved-cluster.json"
+  "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+  "meta": {
+    "version": "PLCN_v1",
+    "update_url": "https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/main/egg-ark-survival-evolved-cluster.json"
+  },
+  "exported_at": "2025-04-26T20:40:50+00:00",
+  "name": "Ark: Survival Evolved Cluster",
+  "author": "gaming@ferris-s.de",
+  "uuid": "86828e97-2767-4b59-af71-472747deaa5a",
+  "description": "Requires 3 UDP Ports (Game, Game+1, Query) and 1 TCP Port (RCON)\nSet Game Port as primary.\nDefault Ports: (7777, 7778, 27015, 27020).\n\nQuery Port cannot be between 27020 and 27050 due to Steam using those ports.",
+  "tags": [],
+  "features": [
+    "steam_disk_space"
+  ],
+  "docker_images": {
+    "ghcr.io/parkervcp/steamcmd:debian": "ghcr.io/parkervcp/steamcmd:debian"
+  },
+  "file_denylist": [],
+  "startup": "./startup.sh",
+  "config": {
+    "files": "{}",
+    "startup": "{\n    \"done\": \"Waiting commands for 127.0.0.1:\"\n}",
+    "logs": "{}",
+    "stop": "^C"
+  },
+  "scripts": {
+    "installation": {
+      "script": "#!/bin/bash\r\n# steamcmd Base Installation Script\r\n#\r\n# Server Files: /mnt/server\r\n\r\napt -y update\r\napt -y upgrade\r\napt -y --no-install-recommends --no-install-suggests install curl lib32gcc-s1 ca-certificates jq\r\n\r\n## just in case someone removed the defaults.\r\nif [ \"${STEAM_USER}\" == \"\" ]; then\r\n    STEAM_USER=anonymous\r\n    STEAM_PASS=\"\"\r\n    STEAM_AUTH=\"\"\r\nfi\r\n\r\n## download and install steamcmd\r\ncd /tmp\r\nmkdir -p /mnt/server/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C /mnt/server/steamcmd\r\n\r\nmkdir -p /mnt/server/Engine/Binaries/ThirdParty/SteamCMD/Linux\r\ntar -xzvf steamcmd.tar.gz -C /mnt/server/Engine/Binaries/ThirdParty/SteamCMD/Linux\r\nmkdir -p /mnt/server/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd /mnt/server/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root /mnt\r\nexport HOME=/mnt/server\r\n\r\n# finish install steamcmd\r\n./steamcmd.sh +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +force_install_dir /mnt/server ${EXTRA_FLAGS} +quit\r\n\r\n## set up 32 bit libraries\r\nmkdir -p /mnt/server/.steam/sdk32\r\ncp -v linux32/steamclient.so ../.steam/sdk32/steamclient.so\r\n\r\n## set up 64 bit libraries\r\nmkdir -p /mnt/server/.steam/sdk64\r\ncp -v linux64/steamclient.so ../.steam/sdk64/steamclient.so\r\n\r\n## create a symbolic link for loading mods\r\ncd /mnt/server/Engine/Binaries/ThirdParty/SteamCMD/Linux\r\nln -sf ../../../../../Steam/steamapps steamapps\r\ncd /mnt/server\r\n\r\n# Link the ~20GB ShooterGame/Content folder\r\nif [[ $CONTENT_MOUNT ]]; then\r\n    echo \"setup content mount at $CONTENT_MOUNT\"\r\n    mkdir -p $HOME/ShooterGame\r\n    ln -sf \"$CONTENT_MOUNT\" $HOME/ShooterGame/Content\r\nfi\r\n\r\n# Fetch startup.sh\r\nrm -f startup.sh\r\ncurl -sSLO https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/main/startup.sh \\\r\n    && chmod +x startup.sh\r\n\r\n# Get jq\r\nmkdir -p $HOME/.local/bin\r\ncurl -sSL -o jq https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64 \\\r\n    && chmod +x jq && mv jq $HOME/.local/bin/\r\n\r\n# Create empty settings files\r\nmkdir -p $HOME/ShooterGame/Saved/Config/LinuxServer\r\ntouch -a Game.ini\r\ntouch -a GameUserSettings.ini\r\n",
+      "container": "ghcr.io/parkervcp/installers:debian",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": [
+    {
+      "name": "Active Event",
+      "description": "Enable an event. \nEaster\tAllows for the Easter Event to be activated\nArkaeology\tAllows for the Arkaeology Event to be activated.\nExtinctionChronicles\tAllows for the Extinction Chronicles Event to be activated.\nWinterWonderland\tAllows for Winter Wonderland 2020 Event to be activated.\nvday\tAllows for Love Evolved to be activated.\nSummer\tAllows for Summer Bash 2020 Event to be activated.\nFearEvolved\tAllows for ARK: Fear Evolved 4 to be activated.\nTurkeyTrial\tAllows for ARK: Turkey Trial 4 to be activated.\nbirthday\tAllows for ARK: 5th Anniversary to be activated.\nNone\tDisables active event.",
+      "env_variable": "ACTIVE_EVENT",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "string"
+      ],
+      "sort": 19
     },
-    "exported_at": "2025-04-26T20:40:50+00:00",
-    "name": "Ark: Survival Evolved Cluster",
-    "author": "gaming@ferris-s.de",
-    "uuid": "86828e97-2767-4b59-af71-472747deaa5a",
-    "description": "Requires 3 UDP Ports (Game, Game+1, Query) and 1 TCP Port (RCON)\nSet Game Port as primary.\nDefault Ports: (7777, 7778, 27015, 27020).\n\nQuery Port cannot be between 27020 and 27050 due to Steam using those ports.",
-    "tags": [],
-    "features": [
-        "steam_disk_space"
-    ],
-    "docker_images": {
-        "ghcr.io\/parkervcp\/steamcmd:debian": "ghcr.io\/parkervcp\/steamcmd:debian"
+    {
+      "name": "Additional Arguments",
+      "description": "Specify additional launch parameters such as -crossplay. You must include a dash - and separate each parameter with space: -crossplay -exclusivejoin.\nSee QArgs for questionmark arguments.",
+      "env_variable": "ARGS",
+      "default_value": "-NoTransferFromFiltering -structurememopts",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "string"
+      ],
+      "sort": 11
     },
-    "file_denylist": [],
-    "startup": ".\/startup.sh",
-    "config": {
-        "files": "{}",
-        "startup": "{\n    \"done\": \"Waiting commands for 127.0.0.1:\"\n}",
-        "logs": "{}",
-        "stop": "^C"
+    {
+      "name": "Admin Password",
+      "description": "If specified, players must provide this password (via the in-game console) to gain access to administrator commands on the server.",
+      "env_variable": "ARK_ADMIN_PASSWORD",
+      "default_value": "PleaseChangeMe",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "required",
+        "alpha_dash",
+        "between:1,100"
+      ],
+      "sort": 2
     },
-    "scripts": {
-        "installation": {
-            "script": "#!\/bin\/bash\r\n# steamcmd Base Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n\r\napt -y update\r\napt -y upgrade\r\napt -y --no-install-recommends --no-install-suggests install curl lib32gcc-s1 ca-certificates jq\r\n\r\n## just in case someone removed the defaults.\r\nif [ \"${STEAM_USER}\" == \"\" ]; then\r\n    STEAM_USER=anonymous\r\n    STEAM_PASS=\"\"\r\n    STEAM_AUTH=\"\"\r\nfi\r\n\r\n## download and install steamcmd\r\ncd \/tmp\r\nmkdir -p \/mnt\/server\/steamcmd\r\ncurl -sSL -o steamcmd.tar.gz https:\/\/steamcdn-a.akamaihd.net\/client\/installer\/steamcmd_linux.tar.gz\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/steamcmd\r\n\r\nmkdir -p \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\ntar -xzvf steamcmd.tar.gz -C \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\nmkdir -p \/mnt\/server\/steamapps # Fix steamcmd disk write error when this folder is missing\r\ncd \/mnt\/server\/steamcmd\r\n\r\n# SteamCMD fails otherwise for some reason, even running as root.\r\n# This is changed at the end of the install process anyways.\r\nchown -R root:root \/mnt\r\nexport HOME=\/mnt\/server\r\n\r\n# finish install steamcmd\r\n.\/steamcmd.sh +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +force_install_dir \/mnt\/server ${EXTRA_FLAGS} +quit\r\n\r\n## set up 32 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk32\r\ncp -v linux32\/steamclient.so ..\/.steam\/sdk32\/steamclient.so\r\n\r\n## set up 64 bit libraries\r\nmkdir -p \/mnt\/server\/.steam\/sdk64\r\ncp -v linux64\/steamclient.so ..\/.steam\/sdk64\/steamclient.so\r\n\r\n## create a symbolic link for loading mods\r\ncd \/mnt\/server\/Engine\/Binaries\/ThirdParty\/SteamCMD\/Linux\r\nln -sf ..\/..\/..\/..\/..\/Steam\/steamapps steamapps\r\ncd \/mnt\/server\r\n\r\n# Link the ~20GB ShooterGame\/Content folder\r\nif [[ $CONTENT_MOUNT ]]; then\r\n    echo \"setup content mount at $CONTENT_MOUNT\"\r\n    mkdir -p $HOME\/ShooterGame\r\n    ln -sf \"$CONTENT_MOUNT\" $HOME\/ShooterGame\/Content\r\nfi\r\n\r\n# Fetch startup.sh\r\nrm -f startup.sh\r\ncurl -sSLO https:\/\/raw.githubusercontent.com\/dsbferris\/pelican-ark\/refs\/heads\/main\/startup.sh \\\r\n    && chmod +x startup.sh\r\n\r\n# Get jq\r\nmkdir -p $HOME\/.local\/bin\r\ncurl -sSL -o jq https:\/\/github.com\/jqlang\/jq\/releases\/download\/jq-1.7.1\/jq-linux-amd64 \\\r\n    && chmod +x jq && mv jq $HOME\/.local\/bin\/\r\n\r\n# Create empty settings files\r\nmkdir -p $HOME\/ShooterGame\/Saved\/Config\/LinuxServer\r\ntouch -a Game.ini\r\ntouch -a GameUserSettings.ini\r\n",
-            "container": "ghcr.io\/parkervcp\/installers:debian",
-            "entrypoint": "bash"
-        }
+    {
+      "name": "App ID",
+      "description": "ARK steam app id for auto updates. Leave blank to avoid auto update.",
+      "env_variable": "SRCDS_APPID",
+      "default_value": "376030",
+      "user_viewable": true,
+      "user_editable": false,
+      "rules": [
+        "nullable",
+        "numeric"
+      ],
+      "sort": 10
     },
-    "variables": [
-        {
-            "name": "Active Event",
-            "description": "Enable an event. \nEaster\tAllows for the Easter Event to be activated\nArkaeology\tAllows for the Arkaeology Event to be activated.\nExtinctionChronicles\tAllows for the Extinction Chronicles Event to be activated.\nWinterWonderland\tAllows for Winter Wonderland 2020 Event to be activated.\nvday\tAllows for Love Evolved to be activated.\nSummer\tAllows for Summer Bash 2020 Event to be activated.\nFearEvolved\tAllows for ARK: Fear Evolved 4 to be activated.\nTurkeyTrial\tAllows for ARK: Turkey Trial 4 to be activated.\nbirthday\tAllows for ARK: 5th Anniversary to be activated.\nNone\tDisables active event.",
-            "env_variable": "ACTIVE_EVENT",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ],
-            "sort": 19
-        },
-        {
-            "name": "Additional Arguments",
-            "description": "Specify additional launch parameters such as -crossplay. You must include a dash - and separate each parameter with space: -crossplay -exclusivejoin.\nSee QArgs for questionmark arguments.",
-            "env_variable": "ARGS",
-            "default_value": "-NoTransferFromFiltering -structurememopts",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ],
-            "sort": 11
-        },
-        {
-            "name": "Admin Password",
-            "description": "If specified, players must provide this password (via the in-game console) to gain access to administrator commands on the server.",
-            "env_variable": "ARK_ADMIN_PASSWORD",
-            "default_value": "PleaseChangeMe",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "alpha_dash",
-                "between:1,100"
-            ],
-            "sort": 2
-        },
-        {
-            "name": "App ID",
-            "description": "ARK steam app id for auto updates. Leave blank to avoid auto update.",
-            "env_variable": "SRCDS_APPID",
-            "default_value": "376030",
-            "user_viewable": true,
-            "user_editable": false,
-            "rules": [
-                "nullable",
-                "numeric"
-            ],
-            "sort": 10
-        },
-        {
-            "name": "Auto-update server",
-            "description": "This is to enable auto-updating for servers.\r\n\r\nDefault is 0. Set to 1 to update",
-            "env_variable": "AUTO_UPDATE",
-            "default_value": "0",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "boolean"
-            ],
-            "sort": 8
-        },
-        {
-            "name": "Battle Eye",
-            "description": "Enable BattleEye\r\n\r\n0 to disable\r\n1 to enable\r\n\r\ndefault=\"1\"",
-            "env_variable": "BATTLE_EYE",
-            "default_value": "1",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "boolean"
-            ],
-            "sort": 9
-        },
-        {
-            "name": "Cluster Directory Override",
-            "description": "The directory to save cluster files. This needs to be the location of your mount.\nExample: \/mnt\/ark\/cluster-dir\/",
-            "env_variable": "CLUSTER_DIR",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ],
-            "sort": 16
-        },
-        {
-            "name": "Cluster ID",
-            "description": "The Cluster ID needs to be the same across all servers in a cluster. This value should be treated like a password.",
-            "env_variable": "CLUSTER_ID",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ],
-            "sort": 15
-        },
-        {
-            "name": "Collection ID",
-            "description": "Additionally to Mods (MOD_IDS) you can specify Collection IDs here. Order of mods is taken from the collection. When used in addition to Mods (MOD_IDS) Collections come first, then Mods (MOD_IDS). The collections must be PUBLICLY visible.\nCOLLECTION_IDS need to be comma-separated.",
-            "env_variable": "COLLECTION_IDS",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "string",
-                "nullable"
-            ],
-            "sort": 17
-        },
-        {
-            "name": "Content Mount",
-            "description": "Share the 20GB Content with other ARK Server.\nExample: \/mnt\/ark\/server-files\/ShooterGame\/Content\/",
-            "env_variable": "CONTENT_MOUNT",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ],
-            "sort": 14
-        },
-        {
-            "name": "Max Players",
-            "description": "Specifies the maximum amount of players able to join the server.",
-            "env_variable": "MAX_PLAYERS",
-            "default_value": "12",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "numeric"
-            ],
-            "sort": 12
-        },
-        {
-            "name": "Mods",
-            "description": "Specifies the order and which mods are loaded. ModIDs need to be comma-separated such as: ModID1,ModID2",
-            "env_variable": "MOD_IDS",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ],
-            "sort": 18
-        },
-        {
-            "name": "QArgs",
-            "description": "Questionmark Arguments. No spacings:\nExample: ?ARG1=A?ARG2=B?ARG3=C",
-            "env_variable": "QARGS",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "string"
-            ],
-            "sort": 13
-        },
-        {
-            "name": "Query Port",
-            "description": "ARK query port used by steam server browser and ark client server browser.",
-            "env_variable": "QUERY_PORT",
-            "default_value": "27015",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "numeric"
-            ],
-            "sort": 7
-        },
-        {
-            "name": "Rcon Port",
-            "description": "ARK rcon port used by rcon tools.",
-            "env_variable": "RCON_PORT",
-            "default_value": "27020",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "numeric"
-            ],
-            "sort": 6
-        },
-        {
-            "name": "Server Map",
-            "description": "Available Maps: TheIsland, TheCenter, Ragnarok, ScorchedEarth_P, Aberration_P, Extinction, Valguero_P, Genesis, CrystalIsles, Gen2, Fjordur, LostIsland",
-            "env_variable": "SERVER_MAP",
-            "default_value": "TheIsland",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "string",
-                "max:20"
-            ],
-            "sort": 4
-        },
-        {
-            "name": "Server Name",
-            "description": "ARK server name",
-            "env_variable": "SESSION_NAME",
-            "default_value": "A Pelican Hosted ARK Server",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "required",
-                "string",
-                "max:128"
-            ],
-            "sort": 5
-        },
-        {
-            "name": "Server Password",
-            "description": "If specified, players must provide this password to join the server.",
-            "env_variable": "ARK_PASSWORD",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "alpha_dash",
-                "between:1,100"
-            ],
-            "sort": 1
-        },
-        {
-            "name": "Spectator Password",
-            "description": "If specified, this is the spectator password. \nrequestspectator <password> and stopspectating",
-            "env_variable": "ARK_SPECTATOR_PASSWORD",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": [
-                "nullable",
-                "alpha_dash",
-                "between:1,100"
-            ],
-            "sort": 3
-        },
-        {
-            "name": "Whitelist",
-            "description": "Enable (1) \/ Disable (0) Whitelist via PlayersJoinNoCheckList.txt\n\nCheat AllowPlayerToJoinNoCheck 12345678901234567",
-            "env_variable": "WHITELIST",
-            "default_value": "0",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": [],
-            "sort": 20
-        }
-    ]
+    {
+      "name": "Auto-update server",
+      "description": "This is to enable auto-updating for servers.\r\n\r\nDefault is 0. Set to 1 to update",
+      "env_variable": "AUTO_UPDATE",
+      "default_value": "0",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "required",
+        "boolean"
+      ],
+      "sort": 8
+    },
+    {
+      "name": "Battle Eye",
+      "description": "Enable BattleEye\r\n\r\n0 to disable\r\n1 to enable\r\n\r\ndefault=\"1\"",
+      "env_variable": "BATTLE_EYE",
+      "default_value": "1",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "required",
+        "boolean"
+      ],
+      "sort": 9
+    },
+    {
+      "name": "Cluster Directory Override",
+      "description": "The directory to save cluster files. This needs to be the location of your mount.\nExample: /mnt/ark/cluster-dir/",
+      "env_variable": "CLUSTER_DIR",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "string"
+      ],
+      "sort": 16
+    },
+    {
+      "name": "Cluster ID",
+      "description": "The Cluster ID needs to be the same across all servers in a cluster. This value should be treated like a password.",
+      "env_variable": "CLUSTER_ID",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "string"
+      ],
+      "sort": 15
+    },
+    {
+      "name": "Collection ID",
+      "description": "Additionally to Mods (MOD_IDS) you can specify Collection IDs here. Order of mods is taken from the collection. When used in addition to Mods (MOD_IDS) Collections come first, then Mods (MOD_IDS). The collections must be PUBLICLY visible.\nCOLLECTION_IDS need to be comma-separated.",
+      "env_variable": "COLLECTION_IDS",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "string",
+        "nullable"
+      ],
+      "sort": 17
+    },
+    {
+      "name": "Content Mount",
+      "description": "Share the 20GB Content with other ARK Server.\nExample: /mnt/ark/server-files/ShooterGame/Content/",
+      "env_variable": "CONTENT_MOUNT",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "string"
+      ],
+      "sort": 14
+    },
+    {
+      "name": "Max Players",
+      "description": "Specifies the maximum amount of players able to join the server.",
+      "env_variable": "MAX_PLAYERS",
+      "default_value": "12",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "numeric"
+      ],
+      "sort": 12
+    },
+    {
+      "name": "Mods",
+      "description": "Specifies the order and which mods are loaded. ModIDs need to be comma-separated such as: ModID1,ModID2",
+      "env_variable": "MOD_IDS",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "string"
+      ],
+      "sort": 18
+    },
+    {
+      "name": "QArgs",
+      "description": "Questionmark Arguments. No spacings:\nExample: ?ARG1=A?ARG2=B?ARG3=C",
+      "env_variable": "QARGS",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "string"
+      ],
+      "sort": 13
+    },
+    {
+      "name": "Query Port",
+      "description": "ARK query port used by steam server browser and ark client server browser.",
+      "env_variable": "QUERY_PORT",
+      "default_value": "27015",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "required",
+        "numeric"
+      ],
+      "sort": 7
+    },
+    {
+      "name": "Rcon Port",
+      "description": "ARK rcon port used by rcon tools.",
+      "env_variable": "RCON_PORT",
+      "default_value": "27020",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "required",
+        "numeric"
+      ],
+      "sort": 6
+    },
+    {
+      "name": "Server Map",
+      "description": "Available Maps: TheIsland, TheCenter, Ragnarok, ScorchedEarth_P, Aberration_P, Extinction, Valguero_P, Genesis, CrystalIsles, Gen2, Fjordur, LostIsland",
+      "env_variable": "SERVER_MAP",
+      "default_value": "TheIsland",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "required",
+        "string",
+        "max:20"
+      ],
+      "sort": 4
+    },
+    {
+      "name": "Server Name",
+      "description": "ARK server name",
+      "env_variable": "SESSION_NAME",
+      "default_value": "A Pelican Hosted ARK Server",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "required",
+        "string",
+        "max:128"
+      ],
+      "sort": 5
+    },
+    {
+      "name": "Server Password",
+      "description": "If specified, players must provide this password to join the server.",
+      "env_variable": "ARK_PASSWORD",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "alpha_dash",
+        "between:1,100"
+      ],
+      "sort": 1
+    },
+    {
+      "name": "Spectator Password",
+      "description": "If specified, this is the spectator password. \nrequestspectator <password> and stopspectating",
+      "env_variable": "ARK_SPECTATOR_PASSWORD",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": [
+        "nullable",
+        "alpha_dash",
+        "between:1,100"
+      ],
+      "sort": 3
+    },
+    {
+      "name": "Whitelist",
+      "description": "Enable (1) / Disable (0) Whitelist via PlayersJoinNoCheckList.txt\n\nCheat AllowPlayerToJoinNoCheck 12345678901234567",
+      "env_variable": "WHITELIST",
+      "default_value": "0",
+      "user_viewable": false,
+      "user_editable": false,
+      "rules": [],
+      "sort": 20
+    }
+  ]
 }
