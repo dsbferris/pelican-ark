@@ -26,3 +26,27 @@ Search
 Replace
 - `AspectRatioAxisConstraint=AspectRatio_MaintainYFOV`
 - 
+
+## jq install.sh
+jq '.scripts.installation.script' -r egg-ark-survival-evolved-cluster.json > install.sh
+
+jq --rawfile script install.sh \
+   '.scripts.installation.script = $script' \
+   egg-ark-survival-evolved-cluster.json \
+   > tmp.json && mv tmp.json egg-ark-survival-evolved-cluster.json
+
+jq --rawfile script install.sh \
+   '.scripts.installation.script = $script' \
+   egg-ark-survival-evolved-cluster.json | sponge egg-ark-survival-evolved-cluster.json
+
+## jq startup.sh
+jq '.startup' egg-ark-survival-evolved-cluster.json
+
+jq --rawfile script startup.sh \
+   '.startup = $script' \
+   egg-ark-survival-evolved-cluster.json \
+   > tmp.json && mv tmp.json egg-ark-survival-evolved-cluster.json
+
+jq --rawfile script startup.sh \
+   '.startup = $script' \
+   egg-ark-survival-evolved-cluster.json | sponge egg-ark-survival-evolved-cluster.json
