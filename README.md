@@ -28,25 +28,37 @@ Replace
 - 
 
 ## jq install.sh
-jq '.scripts.installation.script' -r egg-ark-survival-evolved-cluster.json > install.sh
+jq '.scripts.installation.script' -r egg*.json > install.sh
 
 jq --rawfile script install.sh \
    '.scripts.installation.script = $script' \
-   egg-ark-survival-evolved-cluster.json \
-   > tmp.json && mv tmp.json egg-ark-survival-evolved-cluster.json
+   egg*.json \
+   > tmp.json && mv tmp.json egg*.json
 
 jq --rawfile script install.sh \
    '.scripts.installation.script = $script' \
-   egg-ark-survival-evolved-cluster.json | sponge egg-ark-survival-evolved-cluster.json
+   egg*.json | sponge egg*.json
 
 ## jq startup.sh
-jq '.startup' egg-ark-survival-evolved-cluster.json
+jq '.startup' -r egg*.json > startup.sh
 
 jq --rawfile script startup.sh \
    '.startup = $script' \
-   egg-ark-survival-evolved-cluster.json \
-   > tmp.json && mv tmp.json egg-ark-survival-evolved-cluster.json
+   egg*.json \
+   > tmp.json && mv tmp.json egg*.json
 
 jq --rawfile script startup.sh \
    '.startup = $script' \
-   egg-ark-survival-evolved-cluster.json | sponge egg-ark-survival-evolved-cluster.json
+   egg*.json | sponge egg*.json
+
+## jq new startup
+jq '.startup_commands.Default' -r egg*.json > startup.sh
+
+jq --rawfile script startup.sh \
+   '.startup_commands.Default = $script' \
+   egg*.json \
+   > tmp.json && mv tmp.json egg*.json
+
+jq --rawfile script startup.sh \
+   '.startup_commands.Default = $script' \
+   egg*.json | sponge egg*.json
