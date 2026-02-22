@@ -19,7 +19,7 @@
     },
     "file_denylist": [],
     "startup_commands": {
-        "Default": "startup.sh"
+        "Default": "./startup.sh"
     },
     "config": {
         "files": "{}",
