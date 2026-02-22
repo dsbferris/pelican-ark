@@ -46,6 +46,13 @@ cd /mnt/server/Engine/Binaries/ThirdParty/SteamCMD/Linux
 ln -sf ../../../../../Steam/steamapps steamapps
 cd /mnt/server
 
+curl -sSL -o startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/new/formatted/startup.sh
+chmod +x startup.sh
+
+mkdir -p .local/bin
+curl -sSL -o .local/bin/jq https://github.com/jqlang/jq/releases/latest/download/jq-linux-amd64
+chmod +x .local/bin/jq
+
 # Create .pelicanignore file with default config if it doesnt exist
 if [ ! -f ".pelicanignore" ]; then
     echo "Creating .pelicanignore"
