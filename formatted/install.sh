@@ -46,6 +46,8 @@ cd /mnt/server/Engine/Binaries/ThirdParty/SteamCMD/Linux
 ln -sf ../../../../../Steam/steamapps steamapps
 cd /mnt/server
 
+curl -sSL -o /mnt/server/startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/new/formatted/startup.sh
+chmod +x /mnt/server/startup.sh
 
 ## install end
 echo "-----------------------------------------"

@@ -17,7 +17,7 @@ trap rmv SIGTERM SIGINT
 cd ShooterGame/Binaries/Linux || exit 1
 
 # Start the ARK server (preserve original argument template and conditional for BattlEye)
-./ShooterGameServer {{SERVER_MAP}}?listen?SessionName="{{SESSION_NAME}}"?ServerPassword={{ARK_PASSWORD}}?ServerAdminPassword={{ARK_ADMIN_PASSWORD}}?Port={{SERVER_PORT}}?RCONPort={{RCON_PORT}}?QueryPort={{QUERY_PORT}}?RCONEnabled=True?MaxPlayers={{MAX_PLAYERS}}?GameModIds={{MOD_ID}}$( [ "$BATTLE_EYE" == "1" ] || printf %s ' -NoBattlEye' ) -server -automanagedmods {{ARGS}} -log &
+./ShooterGameServer ${SERVER_MAP}?listen?SessionName="${SESSION_NAME}"?ServerPassword=${ARK_PASSWORD}?ServerAdminPassword=${ARK_ADMIN_PASSWORD}?Port=${SERVER_PORT}?RCONPort=${RCON_PORT}?QueryPort=${QUERY_PORT}?RCONEnabled=True?MaxPlayers=${MAX_PLAYERS}?GameModIds=${MOD_ID}$( [ "$BATTLE_EYE" == "1" ] || printf %s ' -NoBattlEye' ) -server -automanagedmods ${ARGS} -log &
 
 ARK_PID=$!
 
