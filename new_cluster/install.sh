@@ -29,6 +29,14 @@ cd /mnt/server/steamcmd
 chown -R root:root /mnt
 export HOME=/mnt/server
 
+
+# Link the ~20GB ShooterGame/Content folder
+if [[ $CONTENT_MOUNT ]]; then
+    echo "Link content mount at $CONTENT_MOUNT"
+    mkdir -p $HOME/ShooterGame
+    ln -sf "$CONTENT_MOUNT" $HOME/ShooterGame/Content
+fi
+
 ## install game using steamcmd
 ./steamcmd.sh +force_install_dir /mnt/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} $( [[ "${WINDOWS_INSTALL}" == "1" ]] && printf %s '+@sSteamCmdForcePlatformType windows' ) +app_update ${SRCDS_APPID} $( [[ -z ${SRCDS_BETAID} ]] || printf %s "-beta ${SRCDS_BETAID}" ) $( [[ -z ${SRCDS_BETAPASS} ]] || printf %s "-betapassword ${SRCDS_BETAPASS}" ) ${INSTALL_FLAGS} validate +quit
 
