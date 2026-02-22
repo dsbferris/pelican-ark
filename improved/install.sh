@@ -46,8 +46,30 @@ cd /mnt/server/Engine/Binaries/ThirdParty/SteamCMD/Linux
 ln -sf ../../../../../Steam/steamapps steamapps
 cd /mnt/server
 
-curl -sSL -o /mnt/server/startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/new/formatted/startup.sh
-chmod +x /mnt/server/startup.sh
+# Create .pelicanignore file with default config if it doesnt exist
+if [ ! -f ".pelicanignore" ]; then
+    echo "Creating .pelicanignore"
+    echo "*" > .pelicanignore
+    echo "!ShooterGame/Saved/" >> .pelicanignore
+fi
+
+# Create whitelist file if it doesnt exist
+if [ ! -f "ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt" ]; then
+    echo "Creating PlayersJoinNoCheckList.txt"
+    mkdir -p ShooterGame/Binaries/Linux
+    touch -a ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt
+fi
+
+# Create empty settings files
+if [ ! -f "ShooterGame/Saved/Config/LinuxServer/Game.ini" ]; then
+    mkdir -p ShooterGame/Saved/Config/LinuxServer
+    touch -a ShooterGame/Saved/Config/LinuxServer/Game.ini
+fi
+if [ ! -f "ShooterGame/Saved/Config/LinuxServer/GameUserSettings.ini" ]; then
+    mkdir -p ShooterGame/Saved/Config/LinuxServer
+    touch -a ShooterGame/Saved/Config/LinuxServer/GameUserSettings.ini
+fi
+
 
 ## install end
 echo "-----------------------------------------"
