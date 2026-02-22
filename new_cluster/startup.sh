@@ -4,6 +4,14 @@ set -o pipefail
 
 echo "####### STARTUP ########"
 
+echo "Checking CONTENT_MOUNT..."
+if [[ $CONTENT_MOUNT ]]; then
+    if [[ ! -d "$CONTENT_MOUNT" ]]; then
+        echo "ERROR: $CONTENT_MOUNT does not exist!"
+        exit 1
+    fi
+fi
+
 # Graceful stop function: save, exit server, wait for PID, then exit
 rmv() {
     echo "####### STOPPING SERVER ########"
