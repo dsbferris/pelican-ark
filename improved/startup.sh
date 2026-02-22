@@ -1,16 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -o pipefail
+
+echo "####### STARTUP ########"
 
 # Graceful stop function: save, exit server, wait for PID, then exit
 rmv() {
-	echo "stopping server"
-	rcon -t rcon -a 127.0.0.1:${RCON_PORT} -p ${ARK_ADMIN_PASSWORD} saveworld \
-		&& rcon -t rcon -a 127.0.0.1:${RCON_PORT} -p ${ARK_ADMIN_PASSWORD} DoExit \
-		&& wait ${ARK_PID}
-
-	echo "Server Closed"
-	exit
+    echo "####### STOPPING SERVER ########"
+    rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p "$ARK_ADMIN_PASSWORD" saveworld && \
+    rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p "$ARK_ADMIN_PASSWORD" DoExit && \
+    wait "$ARK_PID"
+    echo "Server exited gracefully"
+    exit 0
 }
-
+# SIGINT = 2, SIGTERM = 15
 trap rmv SIGTERM SIGINT
 
 # Move to the server binary directory
