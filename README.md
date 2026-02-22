@@ -8,6 +8,9 @@ Featuring:
 - Refactored startup and install scripts
 
 
+## startup
+pelican startup command does not support newlines or comments. Therefore we must download the startup script on install and "bash startup.sh".
+
 ## jq
 format to jq:
 
@@ -24,5 +27,5 @@ jq --indent 4 --rawfile script install.sh \
 jq --indent 4 '.startup_commands.Default' -r egg*.json > startup.sh
 
 jq --indent 4 --rawfile script startup.sh \
-   '.startup = $script' \
+   '.startup_commands.Default = $script' \
    egg*.json | sponge egg*.json
