@@ -28,15 +28,31 @@ if [ "$BATTLE_EYE" != "1" ]; then
 	PARAMS+=" -NoBattlEye"
 fi
 PARAMS+=" -server -automanagedmods ${ARGS} -log"
-# Start the ARK server (preserve original argument template and conditional for BattlEye)
-./ShooterGameServer ${PARAMS} &
 
+
+echo "####### STARTING SERVER ########"
+start=$(date +%s)
+./ShooterGameServer $PARAMS &
+# Store PID
 ARK_PID=$!
 
-# Wait until rcon becomes available before continuing
-until
-	echo "waiting for rcon connection..."
-	(rcon -t rcon -a 127.0.0.1:${RCON_PORT} -p ${ARK_ADMIN_PASSWORD})<&0 & wait $!
-do
-	sleep 5
+sleep 5
+
+counter=0
+echo "Waiting for RCON to be available..."
+while ! rcon -t rcon -T 1s -a 127.0.0.1:$RCON_PORT -p $ARK_ADMIN_PASSWORD "Broadcast Up'n'running" >/dev/null 2>&1; do
+  echo "Server not yet ready... checking again in 5s (retry: $counter)"
+  counter=$((counter+1))
+  sleep 5
 done
+
+end=$(date +%s)
+runtime=$((end-start))
+echo "Server started successfully in $runtime seconds"
+
+echo "####### RCON CONSOLE ACTIVE ########"
+while true; do
+    echo "Connecting to RCON Console..."
+    rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p $ARK_ADMIN_PASSWORD
+done
+
