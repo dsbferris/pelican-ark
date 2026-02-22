@@ -55,7 +55,7 @@ ln -sf ../../../../../Steam/steamapps steamapps
 cd /mnt/server
 
 
-curl -sSL -o $HOME/startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/new/formatted/startup.sh
+curl -sSL -o $HOME/startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/new/new_cluster/startup.sh
 chmod +x $HOME/startup.sh
 
 mkdir -p $HOME/.local/bin
