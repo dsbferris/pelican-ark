@@ -1,0 +1,35 @@
+// https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/?itemcount=1&publishedfileids%5B0%5D=1428596566
+{
+    "response": {
+        "result": 1,
+        "resultcount": 1,
+        "publishedfiledetails": [
+            {
+                "publishedfileid": "1428596566",
+                "result": 1,
+                "creator": "76561198044472964",
+                "creator_app_id": 346110,
+                "consumer_app_id": 346110,
+                "filename": "",
+                "file_size": "1894087",
+                "file_url": "",
+                "hcontent_file": "3964914865861945175",
+                "preview_url": "https://images.steamusercontent.com/ugc/1008149258803148111/6C415FD2123E3CF435E95E3EB615C84BBEEF1535/",
+                "hcontent_preview": "1008149258803148111",
+                "title": "Auto Engrams!",
+                "description": "1428596566\n\nAutomatically unlocks Engrams as you level up. Nothing to learn or do. Just Works!\n\n- No screen spam\n- Ignores points requirements\n- Unlocks regardless of DLC restrictions\n- Works with mods added before and after installing\n- Does not unlock Engrams set to hidden by server configs\n- Respects Engram level overrides\n\nINI option to force unlock Engrams not normally unlocked by the player (TEK Engrams, Engrams unlocked by defating bosses in some mods etc).\nForce unlock happens once the player reaches max level.\n[code]\n[AutoEngrams]\nForceUnlock=True\n[/code]\n\nEnjoy\n\n[URL=https://discord.gg/uMwdPkA][img]https://steamuserimages-a.akamaihd.net/ugc/1303179066322975733/144CEE8A40B55F208ECD8887EFFDB060740D074D/[/img][/URL]\n\n[URL=https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=62MYXSBT75D4E][img]https://steamuserimages-a.akamaihd.net/ugc/1303179066322980137/91478E7DE48769AC075F229116E6EF0DC59B5C18/[/img][/URL]\n\n[URL=https://www.patreon.com/ChrisMods][img]https://steamuserimages-a.akamaihd.net/ugc/1303179066322981908/95D25C2E617F2A4947B4E8048A6A0E5153AB2799/[/img][/URL]\n\n[URL=https://steamcommunity.com/sharedfiles/filedetails/?id=2179512899][img]https://steamuserimages-a.akamaihd.net/ugc/1303179066322983458/1236FD54C8029CFB2E9A146225373BB51958726B/[/img][/URL]",
+                "time_created": 1530470457,
+                "time_updated": 1596561712,
+                "visibility": 0,
+                "banned": 0,
+                "ban_reason": "",
+                "subscriptions": 1462187,
+                "favorited": 58623,
+                "lifetime_subscriptions": 2152812,
+                "lifetime_favorited": 64108,
+                "views": 630584,
+                "tags": []
+            }
+        ]
+    }
+}

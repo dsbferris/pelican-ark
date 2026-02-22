@@ -1,0 +1,85 @@
+// https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/?collectioncount=1&publishedfileids%5B0%5D=3470695377
+{
+    "response": {
+        "result": 1,
+        "resultcount": 1,
+        "collectiondetails": [
+            {
+                "publishedfileid": "3470695377",
+                "result": 1,
+                "children": [
+                    {
+                        "publishedfileid": "1428596566",
+                        "sortorder": 0,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "1404697612",
+                        "sortorder": 1,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "889745138",
+                        "sortorder": 2,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "731604991",
+                        "sortorder": 3,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "1609138312",
+                        "sortorder": 4,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "761535755",
+                        "sortorder": 5,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "751991809",
+                        "sortorder": 6,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "821530042",
+                        "sortorder": 7,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "1591643730",
+                        "sortorder": 8,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "1967741708",
+                        "sortorder": 9,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "2307661303",
+                        "sortorder": 10,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "756389708",
+                        "sortorder": 11,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "1102050924",
+                        "sortorder": 12,
+                        "filetype": 0
+                    },
+                    {
+                        "publishedfileid": "942185438",
+                        "sortorder": 13,
+                        "filetype": 0
+                    }
+                ]
+            }
+        ]
+    }
+}
