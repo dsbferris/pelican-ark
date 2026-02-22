@@ -46,35 +46,36 @@ cd /mnt/server/Engine/Binaries/ThirdParty/SteamCMD/Linux
 ln -sf ../../../../../Steam/steamapps steamapps
 cd /mnt/server
 
-curl -sSL -o startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/new/formatted/startup.sh
-chmod +x startup.sh
 
-mkdir -p .local/bin
-curl -sSL -o .local/bin/jq https://github.com/jqlang/jq/releases/latest/download/jq-linux-amd64
-chmod +x .local/bin/jq
+curl -sSL -o $HOME/startup.sh https://raw.githubusercontent.com/dsbferris/pelican-ark/refs/heads/new/formatted/startup.sh
+chmod +x $HOME/startup.sh
+
+mkdir -p $HOME/.local/bin
+curl -sSL -o $HOME/.local/bin/jq https://github.com/jqlang/jq/releases/latest/download/jq-linux-amd64
+chmod +x $HOME/.local/bin/jq
 
 # Create .pelicanignore file with default config if it doesnt exist
-if [ ! -f ".pelicanignore" ]; then
+if [ ! -f "$HOME/.pelicanignore" ]; then
     echo "Creating .pelicanignore"
-    echo "*" > .pelicanignore
-    echo "!ShooterGame/Saved/" >> .pelicanignore
+    echo "*" > "$HOME/.pelicanignore"
+    echo "!ShooterGame/Saved/" >> "$HOME/.pelicanignore"
 fi
 
 # Create whitelist file if it doesnt exist
-if [ ! -f "ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt" ]; then
+if [ ! -f "$HOME/ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt" ]; then
     echo "Creating PlayersJoinNoCheckList.txt"
-    mkdir -p ShooterGame/Binaries/Linux
-    touch -a ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt
+    mkdir -p $HOME/ShooterGame/Binaries/Linux
+    touch -a $HOME/ShooterGame/Binaries/Linux/PlayersJoinNoCheckList.txt
 fi
 
 # Create empty settings files
-if [ ! -f "ShooterGame/Saved/Config/LinuxServer/Game.ini" ]; then
-    mkdir -p ShooterGame/Saved/Config/LinuxServer
-    touch -a ShooterGame/Saved/Config/LinuxServer/Game.ini
+if [ ! -f "$HOME/ShooterGame/Saved/Config/LinuxServer/Game.ini" ]; then
+    mkdir -p $HOME/ShooterGame/Saved/Config/LinuxServer
+    touch -a $HOME/ShooterGame/Saved/Config/LinuxServer/Game.ini
 fi
-if [ ! -f "ShooterGame/Saved/Config/LinuxServer/GameUserSettings.ini" ]; then
-    mkdir -p ShooterGame/Saved/Config/LinuxServer
-    touch -a ShooterGame/Saved/Config/LinuxServer/GameUserSettings.ini
+if [ ! -f "$HOME/ShooterGame/Saved/Config/LinuxServer/GameUserSettings.ini" ]; then
+    mkdir -p $HOME/ShooterGame/Saved/Config/LinuxServer
+    touch -a $HOME/ShooterGame/Saved/Config/LinuxServer/GameUserSettings.ini
 fi
 
 
