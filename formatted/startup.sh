@@ -18,7 +18,7 @@ cd ShooterGame/Binaries/Linux || exit 1
 
 # Build the parameters for the server start command
 PARAMS="${SERVER_MAP}?listen?SessionName=\"${SESSION_NAME}\""
-PARAMS+="?ServerPassword=\"${ARK_PASSWORD}\"?ServerAdminPassword=\"${ARK_ADMIN_PASSWORD}\""
+PARAMS+="?ServerPassword=${ARK_PASSWORD}?ServerAdminPassword=${ARK_ADMIN_PASSWORD}"
 PARAMS+="?Port=${SERVER_PORT}?RCONPort=${RCON_PORT}?QueryPort=${QUERY_PORT}?RCONEnabled=True"
 PARAMS+="?MaxPlayers=${MAX_PLAYERS}?GameModIds=${MOD_ID}"
 if [ "$BATTLE_EYE" != "1" ]; then

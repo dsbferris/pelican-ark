@@ -86,17 +86,17 @@ get_params() {
     PARAMS+="?Port=$SERVER_PORT?QueryPort=$QUERY_PORT?RCONPort=$RCON_PORT?RCONEnabled=True"
     PARAMS+="?MaxPlayers=$MAX_PLAYERS?SessionName=\"$SESSION_NAME\""
 
-    [[ $ARK_PASSWORD ]] && PARAMS+="?ServerPassword=\"$ARK_PASSWORD\""
-    [[ $ARK_ADMIN_PASSWORD ]] && PARAMS+="?ServerAdminPassword=\"$ARK_ADMIN_PASSWORD\""
-    [[ $ARK_SPECTATOR_PASSWORD ]] && PARAMS+="?SpectatorPassword=\"$ARK_SPECTATOR_PASSWORD\""
+    [[ $ARK_PASSWORD ]] && PARAMS+="?ServerPassword=$ARK_PASSWORD"
+    [[ $ARK_ADMIN_PASSWORD ]] && PARAMS+="?ServerAdminPassword=$ARK_ADMIN_PASSWORD"
+    [[ $ARK_SPECTATOR_PASSWORD ]] && PARAMS+="?SpectatorPassword=$ARK_SPECTATOR_PASSWORD"
     [[ $MODS ]] && PARAMS+="?GameModIds=$MODS"
     [[ $QARGS ]] && PARAMS+="$QARGS"
 
     PARAMS+=" -server -automanagedmods -log"
     [[ $BATTLE_EYE == 0 ]] && PARAMS+=" -NoBattlEye"
     [[ $WHITELIST == 1 ]] && PARAMS+=" -exclusivejoin"
-    [[ $CLUSTER_ID ]] && PARAMS+=" -clusterid=\"$CLUSTER_ID\""
-    [[ $CLUSTER_DIR ]] && PARAMS+=" -ClusterDirOverride=\"$CLUSTER_DIR\""
+    [[ $CLUSTER_ID ]] && PARAMS+=" -clusterid=$CLUSTER_ID"
+    [[ $CLUSTER_DIR ]] && PARAMS+=" -ClusterDirOverride=$CLUSTER_DIR"
     [[ $ACTIVE_EVENT ]] && PARAMS+=" -ActiveEvent=$ACTIVE_EVENT"
     [[ $ARGS ]] && PARAMS+=" $ARGS"
 
