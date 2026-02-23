@@ -118,8 +118,8 @@
             "description": "beta branch of a steam app, e.g. preaquatica. Leave blank to install normal branch",
             "env_variable": "SRCDS_BETAID",
             "default_value": "",
-            "user_viewable": false,
-            "user_editable": false,
+            "user_viewable": true,
+            "user_editable": true,
             "rules": [
                 "nullable"
             ],
@@ -130,8 +130,8 @@
             "description": "Password for a beta branch should one be required during private or closed testing phases.. Leave blank for no password.",
             "env_variable": "SRCDS_BETAPASS",
             "default_value": "",
-            "user_viewable": false,
-            "user_editable": false,
+            "user_viewable": true,
+            "user_editable": true,
             "rules": [
                 "nullable"
             ],
