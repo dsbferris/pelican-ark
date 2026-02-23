@@ -95,10 +95,10 @@ get_params() {
     PARAMS+=" -server -automanagedmods -log"
     [[ $BATTLE_EYE == 0 ]] && PARAMS+=" -NoBattlEye"
     [[ $WHITELIST == 1 ]] && PARAMS+=" -exclusivejoin"
-    [[ $CLUSTER_ID ]] && PARAMS+=" -clusterid=$CLUSTER_ID"
-    [[ $CLUSTER_DIR ]] && PARAMS+=" -ClusterDirOverride=$CLUSTER_DIR"
+    [[ $CLUSTER_ID ]] && PARAMS+=" -clusterid=\"$CLUSTER_ID\""
+    [[ $CLUSTER_DIR ]] && PARAMS+=" -ClusterDirOverride=\"$CLUSTER_DIR\""
     [[ $ACTIVE_EVENT ]] && PARAMS+=" -ActiveEvent=$ACTIVE_EVENT"
-    [[ $ARGS ]] && PARAMS+="$ARGS"
+    [[ $ARGS ]] && PARAMS+=" $ARGS"
 
     echo $PARAMS
 }
