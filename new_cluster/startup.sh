@@ -77,6 +77,7 @@ print_mods() {
     fi
 }
 
+echo "Checking for mods..."
 MODS=$(get_mods)
 print_mods "$MODS"
 
@@ -104,8 +105,7 @@ get_params() {
 }
 
 PARAMS=$(get_params)
-echo "Starting server with parameters: $PARAMS"
-
+echo "Parameters: $PARAMS"
 
 echo "####### STARTING SERVER ########"
 start=$(date +%s)
@@ -114,13 +114,12 @@ start=$(date +%s)
 ARK_PID=$!
 
 sleep 5
-
 counter=0
 echo "Waiting for RCON to be available..."
 while ! rcon -t rcon -T 1s -a 127.0.0.1:$RCON_PORT -p $ARK_ADMIN_PASSWORD "Broadcast Hi there" >/dev/null 2>&1; do
-  echo "Server not yet ready... checking again in 5s (retry: $counter)"
-  counter=$((counter+1))
-  sleep 5
+    echo "Server not yet ready... checking again in 5s (retry: $counter)"
+    counter=$((counter+1))
+    sleep 5
 done
 
 end=$(date +%s)
@@ -132,4 +131,3 @@ while true; do
     echo "Connecting to RCON Console..."
     rcon -t rcon -a 127.0.0.1:"$RCON_PORT" -p $ARK_ADMIN_PASSWORD
 done
-
