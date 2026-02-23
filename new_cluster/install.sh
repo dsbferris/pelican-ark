@@ -34,7 +34,7 @@ export HOME=/mnt/server
 if [[ $CONTENT_MOUNT ]]; then
     echo "Link content mount at $CONTENT_MOUNT"
     mkdir -p $HOME/ShooterGame
-    ln -sf "$CONTENT_MOUNT" $HOME/ShooterGame/Content
+    ln -sfn "$CONTENT_MOUNT" $HOME/ShooterGame/Content
 fi
 
 ## install game using steamcmd
